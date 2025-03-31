@@ -1,0 +1,11 @@
+{ "listen_addr": ":25",
+  "target_port": "2525",
+  "remote_ips": ["192.168.1.45", "10.126.12.2"],
+  "mx_domain": "split.it.example.com",
+  "timeout": 30,
+  "buffer_size": 8192,
+  "resolve_mx": false,
+  "resolve_freq": 5,
+  "rate_limit": 100,
+  "rate_limit_window": 60 
+}
