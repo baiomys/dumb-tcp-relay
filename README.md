@@ -1,4 +1,4 @@
-[![Go Report Card](https://goreportcard.com/badge/github.com/baiomys/dumb-tcp-relay)](https://goreportcard.com/report/github.com/baiomys/dumb-tcp-relay)
+
 
 ## Command line switches  
   -c config file 
