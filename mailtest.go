@@ -168,7 +168,7 @@ func validateConfig() {
 func initLogger() {
         if config.LogFile != "" {
                 var err error
-                logFile, err = os.OpenFile(config.LogFile, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+                logFile, err = os.OpenFile(config.LogFile, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0o644)
                 if err != nil {
                     log.Fatalf("Failed to open log file: %v", err)
                 }
