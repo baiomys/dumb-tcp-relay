@@ -9,23 +9,23 @@ import (
         "net"
         "os"
         "strings"
+        "sync"
         "sync/atomic"
         "time"
-        "sync"
 )
 
 // Config represents the server configuration
 type Config struct {
-        ListenAddr      string   `json:"listen_addr"`      // Address to listen on
-        TargetPort      string   `json:"target_port"`      // Port to forward to
-        RemoteIPs       []string `json:"remote_ips"`       // List of IPs to relay to
-        MXDomain        string   `json:"mx_domain"`        // Domain to lookup MX records for
-        Timeout         int      `json:"timeout"`          // Connection timeout in seconds
-        BufferSize      int      `json:"buffer_size"`      // Buffer size for copying data
-        ResolveMX       bool     `json:"resolve_mx"`       // Whether to resolve MX records
-        ResolveFreq     int      `json:"resolve_freq"`     // MX resolution frequency in minutes
-        RateLimit       int      `json:"rate_limit"`       // Max connections per time window
-        RateLimitWindow int      `json:"rate_limit_window"`// Time window in seconds for rate limiting
+        ListenAddr      string   `json:"listen_addr"`       // Address to listen on
+        TargetPort      string   `json:"target_port"`       // Port to forward to
+        RemoteIPs       []string `json:"remote_ips"`        // List of IPs to relay to
+        MXDomain        string   `json:"mx_domain"`         // Domain to lookup MX records for
+        Timeout         int      `json:"timeout"`           // Connection timeout in seconds
+        BufferSize      int      `json:"buffer_size"`       // Buffer size for copying data
+        ResolveMX       bool     `json:"resolve_mx"`        // Whether to resolve MX records
+        ResolveFreq     int      `json:"resolve_freq"`      // MX resolution frequency in minutes
+        RateLimit       int      `json:"rate_limit"`        // Max connections per time window
+        RateLimitWindow int      `json:"rate_limit_window"` // Time window in seconds for rate limiting
 }
 
 // TCPRelay represents the TCP relay server
@@ -341,12 +341,12 @@ func (r *TCPRelay) handleConnection(src net.Conn) {
         }()
 
         select {
-                case <-closeChan:
-                    src.Close()
-                    dst.Close()
-                case <-time.After(time.Duration(r.config.Timeout) * time.Second):
-                    src.Close()
-                    dst.Close()
+        case <-closeChan:
+                src.Close()
+                dst.Close()
+        case <-time.After(time.Duration(r.config.Timeout) * time.Second):
+                src.Close()
+                dst.Close()
         }
 
         // Wait for both copy routines to finish
